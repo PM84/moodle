@@ -1,0 +1,3 @@
+[submodule "mod/mootyper"]
+	path = mod/mootyper
+	url = https://github.com/drachels/moodle-mod_mootyper.git
