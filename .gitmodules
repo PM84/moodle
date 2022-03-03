@@ -4,3 +4,6 @@
 [submodule "mod/hvp"]
 	path = mod/hvp
 	url = https://github.com/h5p/moodle-mod_hvp.git
+[submodule "course/format/onetopic"]
+	path = course/format/onetopic
+	url = https://github.com/davidherney/moodle-format_onetopic.git
