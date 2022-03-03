@@ -1,3 +1,6 @@
 [submodule "mod/mootyper"]
 	path = mod/mootyper
 	url = https://github.com/drachels/moodle-mod_mootyper.git
+[submodule "mod/hvp"]
+	path = mod/hvp
+	url = https://github.com/h5p/moodle-mod_hvp.git
