@@ -13,3 +13,6 @@
 [submodule "mod/mootimeter"]
 	path = mod/mootimeter
 	url = https://github.com/mebis-lp/mod_mootimeter.git
+[submodule "blocks/qr"]
+	path = blocks/qr
+	url = https://github.com/mebis-lp/moodle-block_qr.git
