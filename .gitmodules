@@ -10,3 +10,6 @@
 [submodule "mod/geogebra"]
 	path = mod/geogebra
 	url = https://github.com/projectestac/moodle-mod_geogebra.git
+[submodule "mod/mootimeter"]
+	path = mod/mootimeter
+	url = https://github.com/mebis-lp/mod_mootimeter.git
