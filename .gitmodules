@@ -16,3 +16,6 @@
 [submodule "blocks/qr"]
 	path = blocks/qr
 	url = https://github.com/mebis-lp/moodle-block_qr.git
+[submodule "repository/office365"]
+	path = repository/office365
+	url = https://github.com/microsoft/moodle-repository_office365.git
