@@ -19,3 +19,6 @@
 [submodule "repository/office365"]
 	path = repository/office365
 	url = https://github.com/microsoft/moodle-repository_office365.git
+[submodule "local/o365"]
+	path = local/o365
+	url = https://github.com/microsoft/moodle-local_o365.git
