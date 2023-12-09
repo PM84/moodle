@@ -25,3 +25,6 @@
 [submodule "blocks/microsoft"]
 	path = blocks/microsoft
 	url = https://github.com/microsoft/moodle-block_microsoft.git
+[submodule "auth/oidc"]
+	path = auth/oidc
+	url = https://github.com/microsoft/moodle-auth_oidc.git
