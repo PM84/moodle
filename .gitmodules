@@ -28,3 +28,6 @@
 [submodule "auth/oidc"]
 	path = auth/oidc
 	url = https://github.com/microsoft/moodle-auth_oidc.git
+[submodule "customfield/field/multiselect"]
+	path = customfield/field/multiselect
+	url = https://github.com/call-learning/moodle-customfield_multiselect.git
