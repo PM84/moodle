@@ -2686,6 +2686,13 @@ $capabilities = array(
         ],
     ],
 
+    // Allow users to view all custom reports.
+    'moodle/reportbuilder:viewall' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [],
+    ],
+
     // Allow users to create/edit their own custom reports.
     'moodle/reportbuilder:edit' => [
         'captype' => 'write',
@@ -2740,5 +2747,15 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
         ]
+    ],
+
+    // Allow users to edit course welcome messages.
+    'moodle/course:editcoursewelcomemessage' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
     ],
 );

@@ -85,7 +85,6 @@ $string['customfield_visibility_help'] = 'This setting determines who can view t
 $string['customfield_visibletoall'] = 'Everyone';
 $string['customfield_visibletoteachers'] = 'Teachers';
 $string['customfieldsettings'] = 'Common course custom fields settings';
-$string['daystakingcourse'] = 'Days taking course';
 $string['defaultsettingscategory'] = 'Default settings';
 $string['downloadcourseconfirmation'] = 'You are about to download a zip file of course content (excluding items which cannot be downloaded and any files larger than {$a}).';
 $string['downloadcoursecontent'] = 'Download course content';
@@ -162,6 +161,11 @@ $string['targetlabelstudentgradetopassno'] = 'Student who is likely to meet the 
 $string['targetlabelstudentgradetopassyes'] = 'Student at risk of not meeting the minimum grade to pass the course.';
 $string['targetlabelteachingyes'] = 'Users with teaching capabilities who have access to the course';
 $string['targetlabelteachingno'] = 'Courses at risk of not starting';
+$string['totalactivities'] = 'Activities: {$a}';
+$string['gotosection'] = 'Go to section {$a}';
 
 // Deprecated since Moodle 4.3.
 $string['aria:courseimage'] = 'Course image';
+
+// Deprecated since Moodle 4.5.
+$string['daystakingcourse'] = 'Days taking course';

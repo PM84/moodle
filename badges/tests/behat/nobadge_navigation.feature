@@ -52,7 +52,7 @@ Feature: Manage badges is not shown when there are no existing badges.
     And I should not see "Testing course badge"
     And I click on "Manage badges" "button"
     And I press "Enable access" action in the "Testing course badge" report row
-    And I click on "Continue" "button"
+    And I click on "Enable" "button" in the "Confirm" "dialogue"
     And I should see "Testing course badge"
     And I click on "Back" "button"
     And "Manage badges" "button" should exist
@@ -92,7 +92,7 @@ Feature: Manage badges is not shown when there are no existing badges.
     And I navigate to "Badges" in current page administration
     And I click on "Manage badges" "button"
     And I press "Enable access" action in the "Testing course badge" report row
-    And I press "Continue"
+    And I click on "Enable" "button" in the "Confirm" "dialogue"
     And I log out
     # Now student should see the Badges link.
     And I am on the "C1" "Course" page logged in as "student1"
@@ -100,3 +100,6 @@ Feature: Manage badges is not shown when there are no existing badges.
     And "Manage badges" "button" should not exist
     And "Add a new badge" "button" should not exist
     And I should not see "There are currently no badges available for users to earn."
+    And the following should exist in the "reportbuilder-table" table:
+      | Name                  | Description                       | Criteria            |
+      | Testing course badge  | Testing course badge description  | Awarded by: Teacher |

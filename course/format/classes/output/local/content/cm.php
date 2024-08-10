@@ -25,6 +25,7 @@
 namespace core_courseformat\output\local\content;
 
 use cm_info;
+use context_course;
 use core\output\named_templatable;
 use core_availability\info_module;
 use core_courseformat\base as course_format;
@@ -107,6 +108,8 @@ class cm implements named_templatable, renderable {
      * @return stdClass data context for a mustache template
      */
     public function export_for_template(renderer_base $output): stdClass {
+        global $PAGE;
+
         $mod = $this->mod;
         $displayoptions = $this->displayoptions;
 
@@ -118,6 +121,9 @@ class cm implements named_templatable, renderable {
             'textclasses' => $displayoptions['textclasses'],
             'classlist' => [],
             'cmid' => $mod->id,
+            'editing' => $PAGE->user_is_editing(),
+            'sectionnum' => $this->section->section,
+            'cmbulk' => !$mod->get_delegated_section_info(),
         ];
 
         // Add partial data segments.
@@ -180,7 +186,7 @@ class cm implements named_templatable, renderable {
             $this->displayoptions
         );
         $modavailability = $availability->export_for_template($output);
-        $data->modavailability = $modavailability;
+        $data->modavailability = $modavailability ?? false;
         return $availability->has_availability($output);
     }
 
@@ -297,10 +303,16 @@ class cm implements named_templatable, renderable {
      * @return bool if the cm has editor data
      */
     protected function add_editor_data(stdClass &$data, renderer_base $output): bool {
-        if (!$this->format->show_editor()) {
+        $course = $this->format->get_course();
+        $coursecontext = context_course::instance($course->id);
+        $editcaps = [];
+        if (has_capability('moodle/course:activityvisibility', $coursecontext)) {
+            $editcaps = ['moodle/course:activityvisibility'];
+        }
+        if (!$this->format->show_editor($editcaps)) {
             return false;
         }
-        $returnsection = $this->format->get_section_number();
+        $returnsection = $this->format->get_sectionnum();
         // Edit actions.
         $controlmenu = new $this->controlmenuclass(
             $this->format,
@@ -308,7 +320,8 @@ class cm implements named_templatable, renderable {
             $this->mod,
             $this->displayoptions
         );
-        $data->controlmenu = $controlmenu->export_for_template($output);
+        $data->controlmenu = $controlmenu->export_for_template($output) ?? false;
+
         if (!$this->format->supports_components()) {
             // Add the legacy YUI move link.
             $data->moveicon = course_get_cm_move($this->mod, $returnsection);
@@ -339,8 +352,8 @@ class cm implements named_templatable, renderable {
     protected function add_visibility_data(stdClass &$data, renderer_base $output): bool {
         $visibility = new $this->visibilityclass($this->format, $this->section, $this->mod);
         $templatedata = $visibility->export_for_template($output);
+        $data->visibility = $templatedata ?? false;
         if ($templatedata) {
-            $data->visibility = $templatedata;
             return true;
         }
         return false;

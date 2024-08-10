@@ -14,21 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Contains class \core\output\icon_system
- *
- * @package    core
- * @category   output
- * @copyright  2016 Damyon Wiese
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace core\output;
-
-use renderer_base;
-use pix_icon;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class allowing different systems for mapping and rendering icons.
@@ -44,11 +30,23 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class icon_system_fontawesome extends icon_system_font {
-
     /**
      * @var array $map Cached map of moodle icon names to font awesome icon names.
      */
     private $map = [];
+
+    /**
+     * @var array $families List of Font Awesome families.
+     */
+    private $families = [
+        'fa-brands',
+        'fa-solid',
+        'fa-regular',
+        'fa-light',
+        'fa-thin',
+        'fa-duotone',
+        'fa-sharp',
+    ];
 
     public function get_core_icon_map() {
         return [
@@ -193,6 +191,7 @@ class icon_system_fontawesome extends icon_system_font {
             'theme:fp/view_icon_active' => 'fa-th',
             'theme:fp/view_list_active' => 'fa-list',
             'theme:fp/view_tree_active' => 'fa-folder',
+            'core:i/activities' => 'fa-file-pen',
             'core:i/addblock' => 'fa-plus-square',
             'core:i/assignroles' => 'fa-user-plus',
             'core:i/asterisk' => 'fa-asterisk',
@@ -214,8 +213,10 @@ class icon_system_fontawesome extends icon_system_font {
             'core:i/contentbank' => 'fa-paint-brush',
             'core:i/dashboard' => 'fa-tachometer',
             'core:i/categoryevent' => 'fa-cubes',
+            'core:i/chartbar' => 'fa-chart-bar',
             'core:i/course' => 'fa-graduation-cap',
             'core:i/courseevent' => 'fa-graduation-cap',
+            'core:i/cloudupload' => 'fa-cloud-upload',
             'core:i/customfield' => 'fa-hand-o-right',
             'core:i/db' => 'fa-database',
             'core:i/delete' => 'fa-trash',
@@ -243,6 +244,9 @@ class icon_system_fontawesome extends icon_system_font {
             'core:i/link' => 'fa-link',
             'core:i/externallink' => 'fa-external-link',
             'core:i/files' => 'fa-file',
+            'core:i/file_plus' => 'fa-file-circle-plus',
+            'core:i/file_export' => 'fa-file-export',
+            'core:i/file_import' => 'fa-file-import',
             'core:i/filter' => 'fa-filter',
             'core:i/flagged' => 'fa-flag',
             'core:i/folder' => 'fa-folder',
@@ -262,8 +266,8 @@ class icon_system_fontawesome extends icon_system_font {
             'core:i/info' => 'fa-info',
             'core:i/invalid' => 'fa-times text-danger',
             'core:i/item' => 'fa-circle',
-            'core:i/loading' => 'fa-circle-o-notch fa-spin',
-            'core:i/loading_small' => 'fa-circle-o-notch fa-spin',
+            'core:i/loading' => 'fa-circle-o-notch fa-spin fa-sm',
+            'core:i/loading_small' => 'fa-circle-o-notch fa-spin fa-sm',
             'core:i/location' => 'fa-map-marker',
             'core:i/lock' => 'fa-lock',
             'core:i/log' => 'fa-list-alt',
@@ -345,6 +349,7 @@ class icon_system_fontawesome extends icon_system_font {
             'core:i/user' => 'fa-user',
             'core:i/users' => 'fa-users',
             'core:i/valid' => 'fa-check text-success',
+            'core:i/viewsection' => 'fa-pager',
             'core:i/warning' => 'fa-exclamation text-warning',
             'core:i/window_close' => 'fa-window-close',
             'core:i/withsubcat' => 'fa-plus-square',
@@ -406,7 +411,7 @@ class icon_system_fontawesome extends icon_system_font {
             'core:t/grades' => 'fa-table',
             'core:t/groupn' => 'fa-user',
             'core:t/groups' => 'fa-user-circle',
-            'core:t/groupv' => 'fa-user-circle-o',
+            'core:t/groupv' => 'fa-user-group',
             'core:t/hide' => 'fa-eye',
             'core:t/index_drawer' => 'fa-list',
             'core:t/left' => 'fa-arrow-left',
@@ -466,7 +471,7 @@ class icon_system_fontawesome extends icon_system_font {
 
             // Create different mapping keys for different icon system classes, there may be several different
             // themes on the same site.
-            $mapkey = 'mapping_'.preg_replace('/[^a-zA-Z0-9_]/', '_', get_class($this));
+            $mapkey = 'mapping_' . preg_replace('/[^a-zA-Z0-9_]/', '_', get_class($this));
             $this->map = $cache->get($mapkey);
 
             if (empty($this->map)) {
@@ -481,18 +486,39 @@ class icon_system_fontawesome extends icon_system_font {
                         }
                     }
                 }
+
+                // Add the solid class by default to all icons that have not specific family.
+                foreach ($this->map as $from => $to) {
+                    $this->map[$from] = $this->add_family($to);
+                }
+
                 $cache->set($mapkey, $this->map);
             }
-
         }
         return $this->map;
     }
 
+    /**
+     * Add the family to the icon if not present.
+     *
+     * @param string $cssclasses The icon classes.
+     * @return string The icon classes with the family.
+     */
+    protected function add_family(string $cssclasses): string {
+        $family = array_intersect(explode(' ', $cssclasses), $this->families);
+        if (count($family) != 0) {
+            return $cssclasses;
+        }
 
+        return 'fa ' . $cssclasses;
+    }
+
+    #[\Override]
     public function get_amd_name() {
         return 'core/icon_system_fontawesome';
     }
 
+    #[\Override]
     public function render_pix_icon(renderer_base $output, pix_icon $icon) {
         $subtype = 'pix_icon_fontawesome';
         $subpix = new $subtype($icon);
@@ -514,5 +540,4 @@ class icon_system_fontawesome extends icon_system_font {
 
         return $output->render_from_template('core/pix_icon_fontawesome', $data);
     }
-
 }

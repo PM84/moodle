@@ -102,16 +102,15 @@ define('BADGE_MESSAGE_MONTHLY', 4);
 define('BADGRIO_BACKPACKAPIURL', 'https://api.badgr.io/v2');
 define('BADGRIO_BACKPACKWEBURL', 'https://badgr.io');
 
-/*
- * @deprecated since 3.9 (MDL-66357).
+/**
+ * @deprecated since Moodle 4.5.
+ * @todo Final deprecation in Moodle 6.0. See MDL-82332.
  */
-define('BADGE_BACKPACKAPIURL', 'https://backpack.openbadges.org');
-define('BADGE_BACKPACKWEBURL', 'https://backpack.openbadges.org');
+define('OPEN_BADGES_V1', 1);
 
 /*
  * Open Badges specifications.
  */
-define('OPEN_BADGES_V1', 1);
 define('OPEN_BADGES_V2', 2);
 define('OPEN_BADGES_V2P1', 2.1);
 
@@ -152,7 +151,8 @@ function badges_notify_badge_award(badge $badge, $userid, $issued, $filepathhash
     $userfrom->firstname = !empty($CFG->badges_defaultissuername) ? $CFG->badges_defaultissuername : $admin->firstname;
     $userfrom->maildisplay = true;
 
-    $issuedlink = html_writer::link(new moodle_url('/badges/badge.php', array('hash' => $issued)), $badge->name);
+    $badgeurl = new moodle_url('/badges/badge.php', ['hash' => $issued]);
+    $issuedlink = html_writer::link($badgeurl, $badge->name);
     $userto = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
 
     $params = new stdClass();
@@ -170,6 +170,8 @@ function badges_notify_badge_award(badge $badge, $userid, $issued, $filepathhash
     $eventdata->userfrom          = $userfrom;
     $eventdata->userto            = $userto;
     $eventdata->notification      = 1;
+    $eventdata->contexturl        = $badgeurl;
+    $eventdata->contexturlname    = $badge->name;
     $eventdata->subject           = $badge->messagesubject;
     $eventdata->fullmessage       = $plaintext;
     $eventdata->fullmessageformat = FORMAT_HTML;
@@ -212,6 +214,8 @@ function badges_notify_badge_award(badge $badge, $userid, $issued, $filepathhash
         $eventdata->userfrom          = $userfrom;
         $eventdata->userto            = $creator;
         $eventdata->notification      = 1;
+        $eventdata->contexturl        = $badgeurl;
+        $eventdata->contexturlname    = $badge->name;
         $eventdata->subject           = $creatorsubject;
         $eventdata->fullmessage       = html_to_text($creatormessage);
         $eventdata->fullmessageformat = FORMAT_HTML;
@@ -231,7 +235,7 @@ function badges_notify_badge_award(badge $badge, $userid, $issued, $filepathhash
 /**
  * Caclulates date for the next message digest to badge creators.
  *
- * @param in $schedule Type of message schedule BADGE_MESSAGE_DAILY|BADGE_MESSAGE_WEEKLY|BADGE_MESSAGE_MONTHLY.
+ * @param int $schedule Type of message schedule BADGE_MESSAGE_DAILY|BADGE_MESSAGE_WEEKLY|BADGE_MESSAGE_MONTHLY.
  * @return int Timestamp for next cron
  */
 function badges_calculate_message_schedule($schedule) {
@@ -512,7 +516,7 @@ function badges_add_course_navigation(navigation_node $coursenode, stdClass $cou
             navigation_node::TYPE_SETTING, null, 'coursebadges');
 
         if (has_capability('moodle/badges:createbadge', $coursecontext)) {
-            $url = new moodle_url('/badges/newbadge.php', array('type' => BADGE_TYPE_COURSE, 'id' => $course->id));
+            $url = new moodle_url('/badges/edit.php', ['action' => 'new', 'courseid' => $course->id]);
 
             $coursenode->get('coursebadges')->add(get_string('newbadge', 'badges'), $url,
                     navigation_node::TYPE_SETTING, null, 'newbadge');
@@ -593,7 +597,7 @@ function print_badge_image(badge $badge, stdClass $context, $size = 'small') {
  * @param int $badgeid ID of the original badge.
  * @param int $userid ID of badge recipient (optional).
  * @param boolean $pathhash Return file pathhash instead of image url (optional).
- * @return string|url Returns either new file path hash or new file URL
+ * @return string|moodle_url|null Returns either new file path hash or new file URL
  */
 function badges_bake($hash, $badgeid, $userid = 0, $pathhash = false) {
     global $CFG, $USER;
@@ -1095,7 +1099,6 @@ function badges_change_sortorder_backpacks(int $backpackid, int $direction): voi
  */
 function badges_get_badge_api_versions() {
     return [
-        (string)OPEN_BADGES_V1 => get_string('openbadgesv1', 'badges'),
         (string)OPEN_BADGES_V2 => get_string('openbadgesv2', 'badges'),
         (string)OPEN_BADGES_V2P1 => get_string('openbadgesv2p1', 'badges')
     ];
@@ -1216,7 +1219,6 @@ function badges_external_delete_mappings($sitebackpackid) {
  * @param integer $sitebackpackid The site backpack to connect to.
  * @param string $type The type of this remote object.
  * @param string $internalid The id for this object on the Moodle site.
- * @return boolean
  */
 function badges_external_delete_mapping($sitebackpackid, $type, $internalid) {
     global $DB;
@@ -1466,7 +1468,7 @@ function badges_verify_backpack(int $backpackid) {
  * @param stdClass $backpack The Badgr backpack we are pushing to
  * @param string $type The type of object we are dealing with either Issuer, Assertion OR Badge.
  * @param string $externalid The externalid as provided by the backpack
- * @return string The public URL to access Badgr objects
+ * @return ?string The public URL to access Badgr objects
  */
 function badges_generate_badgr_open_url($backpack, $type, $externalid) {
     if (badges_open_badges_backpack_api($backpack->id) == OPEN_BADGES_V2) {

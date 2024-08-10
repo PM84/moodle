@@ -1508,8 +1508,7 @@ class pgsql_native_moodle_database extends moodle_database {
         return " $fieldname::real ";
     }
 
-    public function sql_concat() {
-        $arr = func_get_args();
+    public function sql_concat(...$arr) {
         $s = implode(' || ', $arr);
         if ($s === '') {
             return " '' ";
@@ -1721,6 +1720,15 @@ class pgsql_native_moodle_database extends moodle_database {
      * @return bool
      */
     public function is_fulltext_search_supported() {
+        return true;
+    }
+
+    /**
+     * Postgresql supports the COUNT() window function and provides a performance improvement.
+     *
+     * @return bool
+     */
+    public function is_count_window_function_supported(): bool {
         return true;
     }
 }

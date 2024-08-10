@@ -58,20 +58,20 @@ Feature: View gradebook when single item scales are used
   Scenario: Test displaying single item scales in gradebook in aggregation method Natural
     When I turn editing mode off
     Then the following should exist in the "user-grades" table:
-      | -1-                | -1-                  | -3-       | -4-            | -5-          |
+      | -1-                | -2-                  | -3-       | -4-            | -5-          |
       | Student 1          | student1@example.com | Ace!      | 1.00           | 1.00         |
     And the following should exist in the "user-grades" table:
       | -1-                | -2-       | -3-            | -4-          |
       | Range              | Ace!–Ace! | 0.00–1.00      | 0.00–1.00    |
       | Overall average    | Ace!      | 1.00           | 1.00         |
     And I navigate to "View > User report" in the course gradebook
-    And I click on "Student 1" in the "user" search widget
+    And I click on "Student 1" in the "Search users" search combo box
     And the following should exist in the "user-grade" table:
       | Grade item                | Grade | Range     | Contribution to course total |
       | Test assignment one       | Ace!  | Ace!–Ace! | 100.00 %                     |
       | ENFR Sub category 1 total | 1.00  | 0–1       | -                            |
       | Course total              | 1.00  | 0–1       | -                            |
-    And I click on "Student 2" in the "user" search widget
+    And I click on "Student 2" in the "Search users" search combo box
     And the following should exist in the "user-grade" table:
       | Grade item                | Grade | Range     | Contribution to course total |
       | Test assignment one       | -     | Ace!–Ace! | -                            |
@@ -92,7 +92,7 @@ Feature: View gradebook when single item scales are used
       | Category name   | Sub category (<aggregation>) |
     And I turn editing mode off
     Then the following should exist in the "user-grades" table:
-      | -1-                | -1-                  | -3-       | -4-            | -5-            |
+      | -1-                | -2-                  | -3-       | -4-            | -5-            |
       | Student 1          | student1@example.com | Ace!      | <cattotal1>    | <coursetotal1> |
       | Student 2          | student2@example.com | -         | -              | -              |
     And the following should exist in the "user-grades" table:
@@ -100,7 +100,7 @@ Feature: View gradebook when single item scales are used
       | Range              | Ace!–Ace! | 0.00–100.0     | 0.00–100.00    |
       | Overall average    | Ace!      | <catavg>       | <overallavg>   |
     And I navigate to "View > User report" in the course gradebook
-    And I click on "Student 1" in the "user" search widget
+    And I click on "Student 1" in the "Search users" search combo box
     And the following should exist in the "user-grade" table:
       | Grade item                         | Grade          | Range       | Contribution to course total |
       | Test assignment one                | Ace!           | Ace!–Ace!   | <contrib1>                   |

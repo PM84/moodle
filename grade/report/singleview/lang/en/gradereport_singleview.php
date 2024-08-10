@@ -44,8 +44,10 @@ $string['excludenonegrades'] = 'Exclude none';
 $string['eventgradereportviewed'] = 'Grade single view report viewed.';
 $string['feedbackfor'] = 'Feedback for {$a}';
 $string['gradefor'] = 'Grade for {$a}';
-$string['gradeitem'] = 'Grade item: {$a}';
-$string['gradeuser'] = 'Grade user: {$a}';
+$string['gradeitem'] = 'Viewing grades for {$a}';
+$string['gradeitemedit'] = 'Editing grades for {$a}';
+$string['gradeuser'] = 'Viewing {$a}\'s grades';
+$string['gradeuseredit'] = 'Editing {$a}\'s grades';
 $string['gotonextreport'] = 'Go to next user report';
 $string['gotopreviousreport'] = 'Go to previous user report';
 $string['noscreens'] = 'Could not find a suitable single view screen.';
@@ -83,9 +85,6 @@ $string['selectagrade'] = 'Select a grade item';
 $string['selectgradeitemlink'] = 'Select a grade item';
 $string['singleviewdescription'] = 'In single view you can override or exclude selected grades and bulk insert grades.';
 $string['unsaveddatawarning'] = 'Unsaved data warning';
-
-// Deprecated since Moodle 4.1.
-$string['filtergrades'] = 'Show grades for {$a}.';
 
 // Deprecated since Moodle 4.3.
 $string['viewsingleuserorgradeitem'] = 'View all the grades of a single user or grade item.';
