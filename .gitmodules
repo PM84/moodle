@@ -16,3 +16,6 @@
 [submodule "theme/boost_magnific"]
 	path = theme/boost_magnific
 	url = https://github.com/EduardoKrausME/moodle-theme_boost_magnific.git
+[submodule "repository/imagehub"]
+	path = repository/imagehub
+	url = https://github.com/mebis-lp/moodle-repository_imagehub.git
