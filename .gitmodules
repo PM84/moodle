@@ -37,3 +37,6 @@
 [submodule "blocks/floatingbutton"]
 	path = blocks/floatingbutton
 	url = https://github.com/mebis-lp/moodle-block_floatingbutton.git
+[submodule "blocks/vitrina"]
+	path = blocks/vitrina
+	url = https://github.com/bambuco/moodle-block_vitrina.git
