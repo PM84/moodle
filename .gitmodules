@@ -13,3 +13,6 @@
 [submodule "theme/degrade"]
 	path = theme/degrade
 	url = https://github.com/EduardoKrausME/moodle-theme_degrade.git
+[submodule "theme/boost_magnific"]
+	path = theme/boost_magnific
+	url = https://github.com/EduardoKrausME/moodle-theme_boost_magnific.git
