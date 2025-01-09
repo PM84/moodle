@@ -7,3 +7,6 @@
 [submodule "customfield/field/file"]
 	path = customfield/field/file
 	url = https://github.com/andrewhancox/moodle-customfield_file.git
+[submodule "lib/editor/tiny/plugins/elements"]
+	path = lib/editor/tiny/plugins/elements
+	url = https://github.com/mebis-lp/moodle-tiny_elements.git
