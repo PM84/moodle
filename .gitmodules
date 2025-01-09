@@ -4,3 +4,6 @@
 [submodule "local/dunjarama_host"]
 	path = local/dunjarama_host
 	url = https://github.com/PM84/moodle-local_dunjarama_host.git
+[submodule "customfield/field/file"]
+	path = customfield/field/file
+	url = https://github.com/andrewhancox/moodle-customfield_file.git
