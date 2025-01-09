@@ -43,3 +43,6 @@
 [submodule "availability/condition/language"]
 	path = availability/condition/language
 	url = https://github.com/ewallah/moodle-availability_language.git
+[submodule "course/format/menutopic"]
+	path = course/format/menutopic
+	url = https://github.com/davidherney/moodle-format_menutopic.git
