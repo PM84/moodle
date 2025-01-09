@@ -1,3 +1,6 @@
 [submodule "local/adminer"]
 	path = local/adminer
 	url = https://github.com/grabs/moodle-local_adminer.git
+[submodule "local/dunjarama_host"]
+	path = local/dunjarama_host
+	url = https://github.com/PM84/moodle-local_dunjarama_host.git
