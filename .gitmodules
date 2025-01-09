@@ -28,3 +28,6 @@
 [submodule "mod/unilabel"]
 	path = mod/unilabel
 	url = https://github.com/grabs/moodle-mod_unilabel.git
+[submodule "mod/board"]
+	path = mod/board
+	url = https://github.com/brickfield/moodle-mod_board.git
