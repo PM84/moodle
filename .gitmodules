@@ -40,3 +40,6 @@
 [submodule "blocks/vitrina"]
 	path = blocks/vitrina
 	url = https://github.com/bambuco/moodle-block_vitrina.git
+[submodule "availability/condition/language"]
+	path = availability/condition/language
+	url = https://github.com/ewallah/moodle-availability_language.git
