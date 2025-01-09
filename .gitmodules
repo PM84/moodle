@@ -22,3 +22,6 @@
 [submodule "mod/learningmap"]
 	path = mod/learningmap
 	url = https://github.com/mebis-lp/mod_learningmap.git
+[submodule "mod/kanban"]
+	path = mod/kanban
+	url = https://github.com/mebis-lp/moodle-mod_kanban.git
