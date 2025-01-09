@@ -19,3 +19,6 @@
 [submodule "repository/imagehub"]
 	path = repository/imagehub
 	url = https://github.com/mebis-lp/moodle-repository_imagehub.git
+[submodule "mod/learningmap"]
+	path = mod/learningmap
+	url = https://github.com/mebis-lp/mod_learningmap.git
