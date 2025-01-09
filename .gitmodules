@@ -10,3 +10,6 @@
 [submodule "lib/editor/tiny/plugins/elements"]
 	path = lib/editor/tiny/plugins/elements
 	url = https://github.com/mebis-lp/moodle-tiny_elements.git
+[submodule "theme/degrade"]
+	path = theme/degrade
+	url = https://github.com/EduardoKrausME/moodle-theme_degrade.git
