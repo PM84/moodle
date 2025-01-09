@@ -25,3 +25,6 @@
 [submodule "mod/kanban"]
 	path = mod/kanban
 	url = https://github.com/mebis-lp/moodle-mod_kanban.git
+[submodule "mod/unilabel"]
+	path = mod/unilabel
+	url = https://github.com/grabs/moodle-mod_unilabel.git
