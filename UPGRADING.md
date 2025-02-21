@@ -33,9 +33,15 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - The deprecated implementation in course/view.php, which uses the extern_server_course function to handle routing between internal and external courses, can be improved by utilizing the Hook API. This enhancement is essential for a project involving multiple universities, as the Hook API provides a more generalized and flexible approach to route users to external courses from within other plugins.
 
   For more information see [MDL-83473](https://tracker.moodle.org/browse/MDL-83473)
+- Add after_role_switched hook that is triggered when we switch role to a new role in a course.
+
+  For more information see [MDL-83542](https://tracker.moodle.org/browse/MDL-83542)
 - New generic collapsable section output added. Use core\output\local\collapsable_section or include the core/local/collapsable_section template to use it. See the full documentation in the component library.
 
   For more information see [MDL-83869](https://tracker.moodle.org/browse/MDL-83869)
+- Now lib/templates/select_menu.mustache has a new integer headinglevel context value to specify the heading level to keep the header accessibility when used as a tertiary navigation.
+
+  For more information see [MDL-84208](https://tracker.moodle.org/browse/MDL-84208)
 
 #### Changed
 
@@ -144,6 +150,22 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 
 ### core_ai
 
+#### Added
+
+- - A new hook, `\core_ai\hook\after_ai_action_settings_form_hook`, has been introduced. It will allows AI provider plugins to add additional form elements for action settings configuration.
+
+  For more information see [MDL-82980](https://tracker.moodle.org/browse/MDL-82980)
+- - AI provider plugins that want to implement `pre-defined models` and display additional settings for models must now extend the `\core_ai\aimodel\base` class.
+
+  For more information see [MDL-82980](https://tracker.moodle.org/browse/MDL-82980)
+
+#### Changed
+
+- - The `\core_ai\form\action_settings_form` class has been updated to automatically include action buttons such as Save and Cancel.
+  - AI provider plugins should update their form classes by removing the `$this->add_action_buttons();` call, as it is no longer required.
+
+  For more information see [MDL-82980](https://tracker.moodle.org/browse/MDL-82980)
+
 #### Deprecated
 
 - The ai_provider_management_table has been refactored to inherit from flexible_table instead of plugin_management_table. As a result the methods get_plugintype and get_action_url are now unused and have been deprecated in the class.
@@ -166,15 +188,32 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 
   For more information see [MDL-66873](https://tracker.moodle.org/browse/MDL-66873)
 
+### core_badges
+
+#### Removed
+
+- The fields imageauthorname, imageauthoremail, and imageauthorurl have been removed from badges due to confusion and their absence from the official specification. These fields also do not appear in OBv3.0. Additionally, the image_author_json.php file has been removed as it is no longer needed.
+
+  For more information see [MDL-83909](https://tracker.moodle.org/browse/MDL-83909)
+
 ### core_completion
 
 #### Added
 
+- Add hook after_cm_completion_updated triggered when an activity completion is updated.
+
+  For more information see [MDL-83542](https://tracker.moodle.org/browse/MDL-83542)
 - The method `count_modules_completed` now delegate the logic to count the completed modules to the DBMS improving the performance of the method.
 
   For more information see [MDL-83917](https://tracker.moodle.org/browse/MDL-83917)
 
 ### core_course
+
+#### Added
+
+- Now the core_courseformat\local\content\cm\completion output is more reusable. All the HTML has been moved to its own mustache file, and the output class has a new set_smallbutton method to decide wether to rendered it as a small button (like in the course page) or as a normal one (for other types of pages).
+
+  For more information see [MDL-83872](https://tracker.moodle.org/browse/MDL-83872)
 
 #### Deprecated
 
@@ -204,6 +243,9 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - Add core_courseformat\base::invalidate_all_session_caches to reset course editor cache for all users when course is changed. This method can be used as an alternative to core_courseformat\base::session_cache_reset for resetting the cache for the current user  in case the change in the course should be reflected for all users.
 
   For more information see [MDL-83185](https://tracker.moodle.org/browse/MDL-83185)
+- Add after_course_content_updated hook triggered when a course content is updated (module modified, ...) through edition.
+
+  For more information see [MDL-83542](https://tracker.moodle.org/browse/MDL-83542)
 
 #### Changed
 
@@ -228,6 +270,23 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - Using arrays to define course menu items is deprecated. All course formats that extend the section or activity control menus (format_NAME\output\courseformat\content\section\controlmenu or format_NAME\output\courseformat\cm\section\controlmenu) should return standard action_menu_link objects instead.
 
   For more information see [MDL-83527](https://tracker.moodle.org/browse/MDL-83527)
+
+#### Removed
+
+- Protected function `core_courseformat\output\local\content\section\availability::availability_info()` has been fully removed. Use `core_courseformat\output\local\content\section\availability::get_availability_data()` instead.
+
+  For more information see [MDL-78489](https://tracker.moodle.org/browse/MDL-78489)
+- The old UI for moving activities and sections without javascript is not avaiable anymore from the actions dropdown. From now, on the only UI to move activities and sections is using the move action in the course editor. Format plugins can still use the old links to make the "move here" elements appear, but they will show deprecated messages. All the non-ajax moving will be removed in Moodle 6.0.
+
+  For more information see [MDL-83562](https://tracker.moodle.org/browse/MDL-83562)
+
+#### Fixed
+
+- HTML IDs relating to section collapse/expand have been changed in the course format templates.
+  - core_courseformat/local/content/section/header #collapssesection{{num}} has been changed to #collapsesectionid{{id}}
+  - core_courseformat/local/content/section/content #coursecontentcollapse{{num}} had been changed to #coursecontentcollapseid{{id}}
+
+  For more information see [MDL-82679](https://tracker.moodle.org/browse/MDL-82679)
 
 ### core_enrol
 
@@ -266,6 +325,9 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - The `get_bulk_actions()` method on the base `plugin_features_base` class has been changed to allow a qbank view object to be passed through. This is nullable and therefore optional for qbank plugins which don't need to do so.
 
   For more information see [MDL-79281](https://tracker.moodle.org/browse/MDL-79281)
+- Question bank Condition classes can now implement a function called "filter_invalid_values($filterconditions)" to remove anything from the filterconditions array which is invalid or should not be there.
+
+  For more information see [MDL-83784](https://tracker.moodle.org/browse/MDL-83784)
 
 #### Changed
 
@@ -293,6 +355,9 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 
 #### Added
 
+- New `report` helper class `get_report_row_count` method for retrieving row count of custom or system report, without having to retrieve the report content
+
+  For more information see [MDL-74488](https://tracker.moodle.org/browse/MDL-74488)
 - New `get_deprecated_tables` method in base entity, to be overridden when an entity no longer uses a table (due to column/filter re-factoring, etc) in order to avoid breaking third-party reports
 
   For more information see [MDL-78118](https://tracker.moodle.org/browse/MDL-78118)
@@ -305,15 +370,24 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - The `core_reportbuilder_testcase` class has been moved to new autoloaded `core_reportbuilder\tests\core_reportbuilder_testcase` location, affected tests no longer have to manually require `/reportbuilder/tests/helpers.php`
 
   For more information see [MDL-84000](https://tracker.moodle.org/browse/MDL-84000)
+- Columns added to system reports can render help icons in table headers via `[set|get]_help_icon` column instance methods
+
+  For more information see [MDL-84016](https://tracker.moodle.org/browse/MDL-84016)
 
 #### Changed
 
 - The `get_active_conditions` method of the base report class has a new `$checkavailable` parameter to determine whether to check the returned conditions availability
 
   For more information see [MDL-82809](https://tracker.moodle.org/browse/MDL-82809)
-- Report table instances no longer populate the `countsql` and `countparams` class properties. Instead calling code can access `totalrows` to obtain the same value, rather than manually counting via the prior properties
+- Report table instances no longer populate the `countsql` and `countparams` class properties. Instead calling code can access `totalrows` to obtain the same value, or by calling the helper method `report::get_report_row_count`
 
   For more information see [MDL-83718](https://tracker.moodle.org/browse/MDL-83718)
+
+#### Deprecated
+
+- The `schedule` helper class `get_schedule_report_count` method is now deprecated, existing code should instead use `report::get_report_row_count`
+
+  For more information see [MDL-74488](https://tracker.moodle.org/browse/MDL-74488)
 
 #### Removed
 
@@ -403,6 +477,21 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 
   For more information see [MDL-81520](https://tracker.moodle.org/browse/MDL-81520)
 
+### mod_data
+
+#### Removed
+
+- Final deprecation and removal of the following classes:
+    - data_preset_importer
+    - data_preset_existing_importer
+    - data_preset_upload_importer
+    - data_import_preset_zip_form
+
+  For more information see [MDL-75189](https://tracker.moodle.org/browse/MDL-75189)
+- - Final deprecation of \mod_data_renderer::import_setting_mappings(). Please use \mod_data_renderer::importing_preset() instead. - Final deprecation of data_print_template() function. Please use mod_data\manager::get_template and mod_data\template::parse_entries instead. - Final deprecation of data_preset_name(). Please use preset::get_name_from_plugin() instead. - Final deprecation of data_get_available_presets(). Please use manager::get_available_presets() instead. - Final deprecation of data_get_available_site_presets(). Please use manager::get_available_saved_presets() instead. - Final deprecation of data_delete_site_preset(). Please use preset::delete() instead. - Final deprecation of is_directory_a_preset(). Please use preset::is_directory_a_preset() instead. - Final deprecation of data_presets_save(). Please use preset::save() instead. - Final deprecation of data_presets_generate_xml(). Please use preset::generate_preset_xml() instead. - Final deprecation of data_presets_export(). Please use preset::export() instead. - Final deprecation of data_user_can_delete_preset(). Please use preset::can_manage() instead. - Final deprecation of data_view(). Please use mod_data\manager::set_module_viewed() instead.
+
+  For more information see [MDL-75189](https://tracker.moodle.org/browse/MDL-75189)
+
 ### mod_feedback
 
 #### Added
@@ -422,6 +511,14 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 - The 'use_template' template has been removed as it is not needed anymore.
 
   For more information see [MDL-81744](https://tracker.moodle.org/browse/MDL-81744)
+
+### mod_folder
+
+#### Removed
+
+- Method htmllize_tree() has been removed. Please use renderable_tree_elements instead
+
+  For more information see [MDL-79214](https://tracker.moodle.org/browse/MDL-79214)
 
 ### mod_h5pactivity
 
@@ -473,6 +570,9 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
 
 #### Removed
 
+- Remove SCSS deprecated in 4.4
+
+  For more information see [MDL-80156](https://tracker.moodle.org/browse/MDL-80156)
 - Remove chat and survey styles. Important note: the styles have been moved to the plugins as CSS files (and not SCSS) so themes might now need to override the mod_chat and mod_survey styles specifically as css does not have any definition for primary, gray and other colors accessible in the original scss version.
 
   For more information see [MDL-82457](https://tracker.moodle.org/browse/MDL-82457)

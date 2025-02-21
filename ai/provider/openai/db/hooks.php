@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Hook listener callbacks for the Open AI Provider.
+ * Hook listener callbacks for the Open AI provider.
  *
  * @package    aiprovider_openai
  * @copyright  2024 Matt Porritt <matt.porritt@moodle.com>
@@ -28,5 +28,10 @@ $callbacks = [
     [
         'hook' => \core_ai\hook\after_ai_provider_form_hook::class,
         'callback' => \aiprovider_openai\hook_listener::class . '::set_form_definition_for_aiprovider_openai',
+    ],
+
+    [
+        'hook' => \core_ai\hook\after_ai_action_settings_form_hook::class,
+        'callback' => \aiprovider_openai\hook_listener::class . '::set_model_form_definition_for_aiprovider_openai',
     ],
 ];

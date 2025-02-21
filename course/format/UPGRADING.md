@@ -13,6 +13,9 @@
 - Add core_courseformat\base::invalidate_all_session_caches to reset course editor cache for all users when course is changed. This method can be used as an alternative to core_courseformat\base::session_cache_reset for resetting the cache for the current user  in case the change in the course should be reflected for all users.
 
   For more information see [MDL-83185](https://tracker.moodle.org/browse/MDL-83185)
+- Add after_course_content_updated hook triggered when a course content is updated (module modified, ...) through edition.
+
+  For more information see [MDL-83542](https://tracker.moodle.org/browse/MDL-83542)
 
 ### Changed
 
@@ -37,6 +40,23 @@
 - Using arrays to define course menu items is deprecated. All course formats that extend the section or activity control menus (format_NAME\output\courseformat\content\section\controlmenu or format_NAME\output\courseformat\cm\section\controlmenu) should return standard action_menu_link objects instead.
 
   For more information see [MDL-83527](https://tracker.moodle.org/browse/MDL-83527)
+
+### Removed
+
+- Protected function `core_courseformat\output\local\content\section\availability::availability_info()` has been fully removed. Use `core_courseformat\output\local\content\section\availability::get_availability_data()` instead.
+
+  For more information see [MDL-78489](https://tracker.moodle.org/browse/MDL-78489)
+- The old UI for moving activities and sections without javascript is not avaiable anymore from the actions dropdown. From now, on the only UI to move activities and sections is using the move action in the course editor. Format plugins can still use the old links to make the "move here" elements appear, but they will show deprecated messages. All the non-ajax moving will be removed in Moodle 6.0.
+
+  For more information see [MDL-83562](https://tracker.moodle.org/browse/MDL-83562)
+
+### Fixed
+
+- HTML IDs relating to section collapse/expand have been changed in the course format templates.
+  - core_courseformat/local/content/section/header #collapssesection{{num}} has been changed to #collapsesectionid{{id}}
+  - core_courseformat/local/content/section/content #coursecontentcollapse{{num}} had been changed to #coursecontentcollapseid{{id}}
+
+  For more information see [MDL-82679](https://tracker.moodle.org/browse/MDL-82679)
 
 ## 4.5
 

@@ -69,7 +69,7 @@ Feature: A teacher can put questions in categories in the question bank
   Scenario: An empty question category can be deleted
     When I am on the "Qbank 1" "core_question > question categories" page
     And I should see "Subcategory & < > \" ' &amp;"
-    And the "title" attribute of "span.qbank_managecategories-newchild.dropready" "css_element" should contain "As new child of Subcategory & < > \" ' &amp;"
+    And the "data-bs-original-title" attribute of "span.qbank_managecategories-newchild.dropready" "css_element" should contain "As new child of Subcategory & < > \" ' &amp;"
     And I open the action menu in "Subcategory" "list_item"
     And I choose "Delete" in the open action menu
     And I click on "Delete" "button" in the "Delete" "dialogue"
@@ -115,3 +115,25 @@ Feature: A teacher can put questions in categories in the question bank
     When I reload the page
     Then I should see "Question 1" in the "categoryquestions" "table"
     And the field "Also show questions from subcategories" matches value "1"
+    And I am on the "Course 1" "core_question > course question bank" page
+    And the field "Also show questions from subcategories" matches value "1"
+
+  Scenario: Filter question by category and subcategories in Quiz question page
+    Given the following "activities" exist:
+      | activity | name      | course | idnumber |
+      | quiz     | Test quiz | C1     | quiz1    |
+    And I am on the "Test quiz" "mod_quiz > Edit" page
+    And I open the "last" add to quiz menu
+    And I follow "from question bank"
+    And I click on "Switch bank" "button"
+    And I click on "Qbank 1" "link" in the "Select question bank" "dialogue"
+    When I set the field "Also show questions from subcategories" to "1"
+    And I click on "Apply filters" "button"
+    Then I should see "Question 1" in the "categoryquestions" "table"
+    And I set the field "Also show questions from subcategories" to "0"
+    And I click on "Apply filters" "button"
+    And I should not see "Question 1"
+    And I click on "Close" "button" in the "Add from the question bank at the end" "dialogue"
+    And I open the "last" add to quiz menu
+    And I follow "from question bank"
+    And the field "Also show questions from subcategories" matches value "0"

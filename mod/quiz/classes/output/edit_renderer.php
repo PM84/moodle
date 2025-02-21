@@ -335,7 +335,7 @@ class edit_renderer extends \plugin_renderer_base {
         $hiddenurl->param('sesskey', sesskey());
 
         $select = html_writer::select($perpage, 'questionsperpage',
-                $structure->get_questions_per_page(), false, ['class' => 'custom-select']);
+                $structure->get_questions_per_page(), false, ['class' => 'form-select']);
 
         $buttonattributes = [
             'type' => 'submit',
@@ -1096,6 +1096,13 @@ class edit_renderer extends \plugin_renderer_base {
         $temp->questiontext = '';
         $temp->name = $structure->describe_random_slot($slot->id);
         $instancename = quiz_question_tostring($temp);
+        if (strpos($instancename, structure::MISSING_QUESTION_CATEGORY_PLACEHOLDER) !== false) {
+            $label = html_writer::span(
+                get_string('missingcategory', 'mod_quiz'),
+                'badge bg-danger text-white h-50'
+            );
+            $instancename = str_replace(structure::MISSING_QUESTION_CATEGORY_PLACEHOLDER, $label, $instancename);
+        }
 
         $configuretitle = get_string('configurerandomquestion', 'quiz');
         $qtype = \question_bank::get_qtype($question->qtype, false);

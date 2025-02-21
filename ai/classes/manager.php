@@ -303,13 +303,13 @@ class manager {
             $defaultconfig = $classname::initialise_action_settings();
 
             // Return the default value.
-            return $defaultconfig[$actionclass]['enabled'];
+            return array_key_exists($actionclass, $defaultconfig) && $defaultconfig[$actionclass]['enabled'];
 
         } else {
             // Get the provider instance.
             $providers = $this->get_provider_instances(['id' => $instanceid]);
             $provider = reset($providers);
-            return $provider->actionconfig[$actionclass]['enabled'];
+            return array_key_exists($actionclass, $provider->actionconfig) && $provider->actionconfig[$actionclass]['enabled'];
         }
     }
 
@@ -366,6 +366,7 @@ class manager {
      * @param string $name The name of the provider config.
      * @param bool $enabled The enabled state of the provider.
      * @param array|null $config The config json.
+     * @param array|null $actionconfig The action config json.
      * @return provider
      */
     public function create_provider_instance(
@@ -373,6 +374,7 @@ class manager {
         string $name,
         bool $enabled = false,
         ?array $config = null,
+        ?array $actionconfig = null,
     ): provider {
         if (!class_exists($classname) || !is_a($classname, provider::class, true)) {
             throw new \coding_exception("Provider class not valid: {$classname}");
@@ -380,7 +382,8 @@ class manager {
         $provider = new $classname(
             enabled: $enabled,
             name: $name,
-            config: $config ? json_encode($config) : '',
+            config: json_encode($config ?? []),
+            actionconfig: $actionconfig ? json_encode($actionconfig) : '',
         );
 
         $id = $this->db->insert_record('ai_providers', $provider->to_record());
@@ -389,11 +392,25 @@ class manager {
     }
 
     /**
+     * Get single provider record according to the filter
+     *
+     * @param array $filter The filterable elements to get the record from
+     * @param int $strictness
+     * @return \stdClass|false
+     */
+    public function get_provider_record(array $filter = [], int $strictness = IGNORE_MISSING): \stdClass|false {
+        return $this->db->get_record(
+            table: 'ai_providers',
+            conditions: $filter,
+            strictness: $strictness,
+        );
+    }
+
+    /**
      * Get the provider records according to the filter.
      *
      * @param array|null $filter The filterable elements to get the records from.
-     * @return array
-     * @throws \dml_exception
+     * @return \stdClass[]
      */
     public function get_provider_records(?array $filter = null): array {
         return $this->db->get_records(
