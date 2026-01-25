@@ -31,3 +31,6 @@
 [submodule "customfield/field/multiselect"]
 	path = customfield/field/multiselect
 	url = https://github.com/call-learning/moodle-customfield_multiselect.git
+[submodule "question/type/accounting"]
+	path = question/type/accounting
+	url = https://github.com/bycs-lp/moodle-qtype_accounting.git
